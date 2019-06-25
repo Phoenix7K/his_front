@@ -6,6 +6,8 @@ import user from "@/components/management/user";
 import constant from "@/components/management/constant";
 import disease from "@/components/management/disease";
 import non_medic from "@/components/management/non_medic";
+import shift from "@/components/shift";
+
 Vue.use(Router)
 
 export default new Router({
@@ -39,6 +41,11 @@ export default new Router({
       path: '/non_medic',
       name: 'Non-medical Charge',
       component: non_medic
+    },
+    {
+      path: '/shift',
+      name: 'Shift',
+      component: shift
     }
   ]
 })
