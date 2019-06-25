@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import dept from "@/components/dept";
+import shift from "@/components/shift";
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '/dept',
       name: 'Department',
       component: dept
+    },
+    {
+      path: '/shift',
+      name: 'Shift',
+      component: shift
     }
   ]
 })
