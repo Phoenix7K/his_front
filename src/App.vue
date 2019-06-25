@@ -7,11 +7,12 @@
             <el-menu-item index="1">处理中心</el-menu-item>
             <el-submenu index="2">
               <template slot="title">Management</template>
-              <el-menu-item index="2-1" @click="naviTo('dept')">Departments</el-menu-item>
-              <el-menu-item index="2-2">Diagnostic Catalog</el-menu-item>
-              <el-menu-item index="2-3">Non-Medical Charge</el-menu-item>
-              <el-menu-item index="2-4">Shift</el-menu-item>
-              <el-menu-item index="2-5">Users</el-menu-item>
+              <el-menu-item index="2-1">Constant</el-menu-item>
+              <el-menu-item index="2-2" @click="naviTo('dept')">Departments</el-menu-item>
+              <el-menu-item index="2-3">Diagnostic Catalog</el-menu-item>
+              <el-menu-item index="2-4">Non-Medical Charge</el-menu-item>
+              <el-menu-item index="2-5">Shift</el-menu-item>
+              <el-menu-item index="2-6">Users</el-menu-item>
             </el-submenu>
             <el-submenu index="3">
               <template slot="title">Register&Payment</template>
