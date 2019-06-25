@@ -11,7 +11,7 @@
               <el-menu-item index="2-2" @click="naviTo('dept')">Departments</el-menu-item>
               <el-menu-item index="2-3">Diagnostic Catalog</el-menu-item>
               <el-menu-item index="2-4">Non-Medical Charge</el-menu-item>
-              <el-menu-item index="2-5">Shift</el-menu-item>
+              <el-menu-item index="2-5" @click="naviTo('shift')">Shift</el-menu-item>
               <el-menu-item index="2-6">Users</el-menu-item>
             </el-submenu>
             <el-submenu index="3">
