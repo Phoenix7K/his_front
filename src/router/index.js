@@ -6,7 +6,7 @@ import user from "@/components/management/user";
 import constant from "@/components/management/constant";
 import disease from "@/components/management/disease";
 import non_medic from "@/components/management/non_medic";
-import shift from "@/components/shift";
+import shift from "@/components/management/shift";
 
 Vue.use(Router)
 
