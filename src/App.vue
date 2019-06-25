@@ -4,7 +4,7 @@
       <el-col :span="4">
         <el-image
           style="width: 100%  ; height: 100%"
-          src="./assets/logo.png"
+          src="/static/image/logo.jpg"
         ></el-image>
       </el-col>
       <el-col :span="20">
