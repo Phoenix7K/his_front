@@ -105,46 +105,9 @@
 </template>
 
 <script>
-  Vue.component('patient-info-line', {
-    props: ['property', 'val'],
-    template: `
-            <el-row
-                    type="flex"
-                    align="center"
-                    :gutter="20"
-                    style="font-weight: bold;
-                           margin-top: 15px">
-                <el-col style="padding-left:5px; font-size: small" :span="8">
-                    <div style="margin-top:8px;">
-                        {{property}}:
-                    </div>
-                </el-col>
-                <el-col :span="16">
-                    <el-tag v-if="val!=null" class="el-tag">{{val}}</el-tag>
-                </el-col>
-            </el-row>
-        `
-  });
+  import entry_line from '../../register/components/entry_line';
+  import patient_info_line from '../../register/components/patient_info_line';
 
-  Vue.component('entry-line', {
-    props: ['bill', 'confirmType'],
-    template: `
-            <el-row style="margin-left: 20px; font-size: medium" type="flex" justify="space-between">
-                <el-col :span="6">
-                    {{bill.feename}}
-                </el-col>
-                <el-col :span="8">
-
-                </el-col>
-                <el-col v-if="confirmType === 'Refund'" :span="6">
-                    {{bill.totalprice}} 元
-                </el-col>
-                <el-col v-else :span="6">
-                    {{bill.totalprice}} 元
-                </el-col>
-            </el-row>
-        `
-  });
   export default {
     name: "billquery",
     data() {
@@ -177,33 +140,38 @@
           pid: null,
           print: null,
           totalprice: null,
+        },
 
-          chargeDialogVisible: false,
-          refundDialogVisible: false,
-          activeName: '',
+        chargeDialogVisible: false,
+        refundDialogVisible: false,
+        activeName: '',
 
-          confirmType: 'Charge',
-          operationList: ["Charge", "Refund", "Query"],
+        confirmType: 'Charge',
+        operationList: ["Charge", "Refund", "Query"],
 
+        paymentMethod: "",
+        paymentMethods: ["现金", "微信", "支付宝"],
+        change: 0,
+        receivedpayment: 0,
+
+        receiptInfo: {
+          items: [],
           paymentMethod: "",
-          paymentMethods: ["现金", "微信", "支付宝"],
-          change: 0,
-          receivedpayment: 0,
-
-          receiptInfo: {
-            items: [],
-            paymentMethod: "",
-            patientInfo: "",
-            date: "",
-            recid: "",
-            totalPrice: "",
-          }
+          patientInfo: "",
+          date: "",
+          recid: "",
+          totalPrice: "",
         }
       }
     },
 
+    components: {
+      'entry-line': entry_line,
+      'patient-info-line': patient_info_line
+    },
+
     mounted: function () {
-      this.searchingPid = parent.patient.pid;
+      this.searchingPid = this.$route.query.pid;
 
     },
 
@@ -256,7 +224,7 @@
       getBills() {
         var that = this;
         this.$axios({
-          url: '/charge/getBills',
+          url: '/api/charge/getBills',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: {condition: this.condition},
@@ -274,7 +242,7 @@
       getUnpaidBills() {
         var that = this;
         this.$axios({
-          url: '/charge/getUnpaidBills',
+          url: '/api/charge/getUnpaidBills',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: {condition: this.condition},
@@ -292,7 +260,7 @@
       getUndoneBills() {
         var that = this;
         this.$axios({
-          url: '/charge/getUndoneBills',
+          url: '/api/charge/getUndoneBills',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: {condition: this.condition},
@@ -339,7 +307,7 @@
         console.log("submitCharge")
         var that = this;
         this.$axios({
-          url: '/charge/changeStatesToPaid',
+          url: '/api/charge/changeStatesToPaid',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: that.multipleSelection,
@@ -359,7 +327,7 @@
         console.log("submitRefund")
         var that = this;
         this.$axios({
-          url: '/charge/refundBill',
+          url: '/api/charge/refundBill',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: that.multipleSelection,
@@ -378,7 +346,7 @@
       logReceipt() {
         var that = this;
         this.$axios({
-          url: '/charge/logReceipt',
+          url: '/api/charge/logReceipt',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: {
@@ -430,7 +398,7 @@
       calculateTotalPrice() {
         var that = this;
         this.$axios({
-          url: '/charge/getPrintedTotalPrice',
+          url: '/api/charge/getPrintedTotalPrice',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: {

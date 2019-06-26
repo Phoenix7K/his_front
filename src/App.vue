@@ -17,9 +17,10 @@
             </el-submenu>
             <el-submenu index="3">
               <template slot="title">Register&Payment</template>
-              <el-menu-item index="3-1">Register</el-menu-item>
-              <el-menu-item index="3-2">Receipt</el-menu-item>
-              <el-menu-item index="3-3">Bill</el-menu-item>
+              <el-menu-item index="3-1" @click="naviTo('register')">Register</el-menu-item>
+              <el-menu-item index="3-2" @click="naviTo('receipt')">Receipt</el-menu-item>
+              <el-menu-item index="3-3" @click="naviTo('bill')">Bill</el-menu-item>
+              <el-menu-item index="3-4" @click="naviTo('cancel_register')">Cancel Registration</el-menu-item>
             </el-submenu>
             <el-submenu index="4">
               <template slot="title">Outpatient</template>
@@ -39,7 +40,7 @@
             </el-submenu>
             <el-submenu index="7">
               <template slot="title">Financial</template>
-              <el-menu-item index="7-1">Daily Record</el-menu-item>
+              <el-menu-item index="7-1" @click="naviTo('dailyrecord')">Daily Record</el-menu-item>
               <el-menu-item index="7-2">Departments</el-menu-item>
               <el-menu-item index="7-3">Doctors</el-menu-item>
             </el-submenu>
