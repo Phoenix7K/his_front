@@ -9,9 +9,11 @@
               <template slot="title">Management</template>
               <el-menu-item index="2-1" @click="naviTo('dept')">Departments</el-menu-item>
               <el-menu-item index="2-2">Diagnostic Catalog</el-menu-item>
-              <el-menu-item index="2-3">Non-Medical Charge</el-menu-item>
+              <el-menu-item index="2-3" @click="naviTo('non_medic')">Non-Medical Charge</el-menu-item>
               <el-menu-item index="2-4" @click="naviTo('shift')">Shift</el-menu-item>
-              <el-menu-item index="2-5">Users</el-menu-item>
+              <el-menu-item index="2-5" @click="naviTo('user')">Users</el-menu-item>
+              <el-menu-item index="2-5" @click="naviTo('constant')">Constants</el-menu-item>
+              <el-menu-item index="2-5" @click="naviTo('disease')">Diagnosis Catalog</el-menu-item>
             </el-submenu>
             <el-submenu index="3">
               <template slot="title">Register&Payment</template>
@@ -21,7 +23,7 @@
             </el-submenu>
             <el-submenu index="4">
               <template slot="title">Outpatient</template>
-              <el-menu-item index="4-1">Homepage</el-menu-item>
+              <el-menu-item index="4-1" @click="naviTo('homepage')">Homepage</el-menu-item>
               <el-menu-item index="4-2">Template Management</el-menu-item>
             </el-submenu>
             <el-submenu index="5">

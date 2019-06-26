@@ -1,0 +1,447 @@
+<template>
+  <div id="user">
+      <el-row :gutter="20">
+        <el-col :span="4">
+          <el-input type="text" v-model="userid" placeholder="ID" clearable></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input type="text" v-model="username" placeholder="User" clearable></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input type="text" v-model="realname" placeholder="Name" clearable></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input type="text" v-model="usercat" placeholder="Category" clearable></el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-button icon="el-icon-search" type="primary" @click="search">Search</el-button>
+        </el-col>
+        <el-col :span="4">
+          <el-button icon="el-icon-circle-plus-outline" type="primary" @click="showDialogForm('Add')">Add
+          </el-button>
+        </el-col>
+      </el-row>
+
+      <el-table
+        :data="users.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+        style="width: 100%">
+        <el-table-column
+          prop="userid"
+          label="ID"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="username"
+          label="User Name"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="pwd"
+          label="Password"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="realname"
+          label="Real Name"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="usercat"
+          label="Category"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="position"
+          label="Position"
+          width="150">
+        </el-table-column>
+        <el-table-column
+          prop="shiftOrNot"
+          label="Shift or Not"
+          width="150"
+          :formatter="shiftFormatter">
+        </el-table-column>
+        <el-table-column
+          label="Departments"
+          width="200"
+          :formatter="deptFormatter">
+        </el-table-column>
+        <el-table-column fixed="right" label="Operations" width="120">
+          <template slot-scope="scope">
+            <el-button @click="showDeleteDialogForm(scope.$index, scope.row)" type="text" size="small">delete
+            </el-button>
+            <el-button @click="showDialogForm('Update',scope.$index, scope.row)" type="text" size="small">
+              update
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 40]"
+
+        :page-size="pagesize"
+        :hide-on-single-page="value"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="users.length">
+      </el-pagination>
+
+
+    <!------------------------------- Form ----------------------------------->
+    <el-dialog :title="formTitle" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="Department" :label-width="formLabelWidth">
+          <!--<el-input v-model="form.strDeptnames" autocomplete="off"></el-input>-->
+          <el-select
+            v-model="form.selectdepts"
+            multiple
+            placeholder="Select"
+            style="width: 80%"
+            :change="showSelectedDepartments()">
+            <el-option
+              v-for="item in deptList"
+              :key="item.deptcode"
+              :label="item.deptname"
+              :value="item.deptcode">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="methodType=='Add'" label="userid" :label-width="formLabelWidth">
+          <el-input v-model="form.userid" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="User Name" :label-width="formLabelWidth">
+          <el-input v-model="form.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Password" :label-width="formLabelWidth">
+          <el-input v-model="form.pwd" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Real Name" :label-width="formLabelWidth">
+          <el-input v-model="form.realname" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Category" :label-width="formLabelWidth">
+          <el-select
+            v-model="form.usercat"
+            placeholder="Select User Category"
+            style="width: 80%">
+            <el-option
+              v-for="item in usercatList"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <div v-if="form.usercat==='门诊医生'">
+          <el-form-item label="Position" :label-width="formLabelWidth">
+            <el-select
+              v-model="form.position"
+              placeholder="Select Doctor Position"
+              style="width: 80%">
+              <el-option
+                v-for="item in positionList"
+                :key="item"
+                :label="item"
+                :value="item">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Shift Or Not" :label-width="formLabelWidth">
+            <template>
+              <el-radio v-model="form.shiftOrNot" :label="true">Yes</el-radio>
+              <el-radio v-model="form.shiftOrNot" :label="false">No</el-radio>
+            </template>
+          </el-form-item>
+        </div>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">{{methodType}}</el-button>
+      </div>
+    </el-dialog>
+
+    <!--    Delete Dialogue -->
+    <el-dialog
+      title="Confirm Delete"
+      :visible.sync="deleteDialogVisible"
+      width="30%"
+    >
+      <span>Are you sure you want to delete this?</span>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="deleteDialogVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="onSubmitDelete">Confirm</el-button>
+        </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+    export default {
+      name: "user",
+      
+      data() {
+        return {
+          //searching attributes
+          userid: "",
+          username: "",
+          pwd: "",
+          realname: "",
+          usercat: "",
+          position: "",
+          shiftOrNot: false,
+
+
+          users: [],
+
+          //Form Dialog
+          methodType: "",//调用方法，Add or Update
+          formTitle: "",
+          dialogFormVisible: false,
+          //Delete
+          deleteDialogVisible: false,//控制弹出删除窗口
+          deletingIndex: -1,
+          deletingObject: {},
+          //Update
+          updatingIndex: -1,
+          updatingObject: {},
+
+          //All dept list
+          deptList: [],
+          usercatList: ["挂号收费员", "门诊医生", "医技医生", "药房操作员", "财务管理员", "医院管理员"],
+          positionList: ["主任医师", "副主任医师", "主治医师", "住院医师"],
+
+          form: {
+            userid: "",
+            username: "",
+            pwd: "",
+            realname: "",
+            usercat: "",
+            position: "",
+            shiftOrNot: false,
+            selectdepts: [],
+          },
+
+          formLabelWidth: '120px',
+
+          //splitpages
+          value: false,
+          currentPage: 1, //初始页
+          pagesize: 10,    //    每页的数据
+        };
+      },
+
+      mounted: function () {
+        console.log("refresh!!!");
+        this.currentPage = 1;
+        var that = this;
+        this.$axios.post('/api/management/users', {})
+          .then(function (response) {
+            console.log(response.data);
+            that.users = response.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+
+      methods: {
+        search: function () {
+          var that = this;
+          console.log("Search");
+          console.log(this.userid);
+          this.$axios.post('/api/management/users', {
+            userid: that.userid,
+            username: that.username,
+            pwd: that.pwd,
+            realname: that.realname,
+            usercat: that.usercat,
+            position: that.position,
+            shiftOrNot: that.shiftOrNot
+          })
+            .then(function (response) {
+              that.users = response.data;
+              console.log(that.users);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+
+
+        refresh: function () {
+          console.log("refresh!!!");
+          this.currentPage = 1;
+          var that = this;
+          that.users = [];
+          this.$axios.post('/api/management/users', {
+            userid: "",
+            username: "",
+            pwd: "",
+            realname: "",
+            usercat: "",
+            position: "",
+            shiftOrNot: ""
+          })
+            .then(function (response) {
+              console.log(response.data);
+              that.users = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+        /*************************-Update Or Add***********************/
+        showDialogForm: function (method, index, row) {
+          this.loadDept();
+          if (method == "Add") {
+            this.form = {}
+          }
+          if (method == "Update") {
+            this.form = {
+              userid: row.userid,
+              username: row.username,
+              pwd: row.pwd,
+              realname: row.realname,
+              usercat: row.usercat,
+              position: row.position,
+              shiftOrNot: row.shiftOrNot,
+              selectdepts: []
+            };
+            let i;
+            for (i = 0; i < row.depts.length; i++)
+              this.form.selectdepts.push(row.depts[i].deptcode);
+          }
+          this.dialogFormVisible = true;
+          this.methodType = method;
+          this.formTitle = method + " Users";
+          this.updatingIndex = index;
+          this.updatingObject = row;
+        },
+
+        onSubmit: function () {
+          if (this.methodType == "Add")
+            this.onSubmitAdd();
+          if (this.methodType == "Update")
+            this.onSubmitUpdate();
+          console.log("onSubmit->Form Content");
+          console.log(this.form);
+          this.dialogFormVisible = false;
+        },
+
+        onSubmitAdd: function () {
+          console.log("onSubmitAdd")
+          console.log(this.users);
+          var that = this;
+          axios({
+            url: '/management/addUser',
+            method: 'post',
+            contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
+            data: this.form,
+          }).then(function (response) {
+            console.log("success onSubmitAdd")
+            that.refresh();
+          }).catch(function (error) {
+            console.log(error);
+          });
+        },
+
+        onSubmitUpdate: function () {
+          var that = this;
+          console.log(that.form);
+          axios({
+            url: '/management/updateUser',
+            method: 'post',
+            contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
+            data: this.form
+          }).then(function (response) {
+            console.log("success updateUser")
+            that.refresh();
+          }).catch(function (error) {
+            console.log(error);
+          });
+        },
+        /**************************Delete******************************/
+        showDeleteDialogForm: function (index, row) {
+          this.deleteDialogVisible = true;
+          this.deletingIndex = index;
+          this.deletingObject = row;
+        },
+
+        onSubmitDelete: function () {
+          var that = this;
+          var params = new URLSearchParams();
+          params.append('userid', this.deletingObject.userid);
+          this.$axios.post('/api/management/deleteUser', params)
+            .then(function (response) {
+              that.refresh();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.deleteDialogVisible = false;
+        },
+
+
+        handleSizeChange: function (pagesize) {
+          this.pagesize = pagesize;
+          console.log(pagesize);
+        },
+        handleCurrentChange: function (currentPage) {
+          this.currentPage = currentPage;
+          console.log(currentPage);
+        },
+
+        /**************************Helper*************************************************/
+
+        /*Show the selected depts from drop down*/
+        showSelectedDepartments: function () {
+          // this.$forceUpdate()
+          // console.log("showSelectedDepartments")
+          // console.log(this.form.selectdepts)
+        },
+
+        shiftFormatter(row) {
+          if (row.shiftOrNot)
+            return "Yes"
+          else
+            return "No"
+        },
+
+        deptFormatter(row) {
+          var deptStr = "";
+          let i;
+          for (i = 0; i < row.depts.length; i++) {
+            if (i == 0)
+              deptStr += row.depts[i].deptname
+            else
+              deptStr += " | " + row.depts[i].deptname
+          }
+          return deptStr
+        },
+
+        loadDept: function () {
+          this.currentPage = 1;
+          var that = this;
+          this.$axios.post('/api/management/depts', {
+            deptcode: "",
+            deptclass: "",
+            deptname: "",
+            deptcat: "",
+          })
+            .then(function (response) {
+              console.log(response.data);
+              that.deptList = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
+      }
+    }
+</script>
+
+<style scoped>
+
+</style>
