@@ -1,0 +1,248 @@
+<template>
+  <div id="dailyrecord">
+
+    <!-----      BUTTONS     ------>
+    <el-row :gutter="20">
+      <el-col :span="16" style="border: none">
+        <div class="grid-content">
+          <el-card class="box-card">
+            <div style="font-weight: bold; font-size: larger">Daily record</div>
+          </el-card>
+        </div>
+      </el-col>
+      <el-col :span="3" style="border: none">
+        <el-button icon="el-icon-printer" type="primary" @click="print">Print</el-button>
+      </el-col>
+      <el-col :span="4" style="border: none">
+        <el-button icon="el-icon-circle-plus-outline" type="primary" @click="createNewRecord">New Record</el-button>
+      </el-col>
+    </el-row>
+
+    <!-----------     Record header       ---------->
+    <el-card class="box-card" style="width: 65vw">
+      <el-row :gutter="20">
+        <el-col :span="5">
+          <div class="grid-content bg-white">
+            <p>Time frame</p>
+          </div>
+        </el-col>
+        <el-col :span="19">
+          <div class="grid-content bg-purple-light gray-areas">
+            <p id="tfr"></p>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="5">
+          <div class="grid-content bg-white">
+            <p>User</p>
+          </div>
+        </el-col>
+        <el-col :span="10">
+          <div class="grid-content bg-purple-light gray-areas" style="margin-top: 5px; margin-bottom: 5px;">
+            <el-input placeholder="Insert username..." v-model="username"></el-input>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content bg-white">
+            <p>ID</p>
+          </div>
+        </el-col>
+        <el-col :span="7">
+          <div class="grid-content bg-purple-light gray-areas" style="margin-top: 5px; margin-bottom: 5px;">
+            <el-input placeholder="Insert user ID..." v-model="userid"></el-input>
+          </div>
+        </el-col>
+      </el-row>
+
+      <el-row :gutter="20">
+        <el-col :span="5" style="border: none">
+          <div class="grid-content"></div>
+        </el-col>
+        <!-----         TABLE for the Items content         ------>
+        <el-col :span="10">
+          <el-table :data="receipts" style="width: 100%; height: fit-content">
+            <el-table-column prop="recid" label="Invoice ID" width="140"></el-table-column>
+            <el-table-column prop="totalprice" label="Amount" width="140"></el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+
+      <!-----      TOTAL and Record details (DATE and Record ID)      ------>
+      <el-row :gutter="20">
+        <el-col :span="5" style="border: none">
+          <div class="grid-content bg-purple-light gray-areas">
+            <p></p>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div class="grid-content bg-purple-light gray-areas">
+            <p></p>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="grid-content bg-purple-light gray-areas">
+            <p></p>
+          </div>
+        </el-col>
+
+        <!--------    STAMP   --------->
+        <el-col :span="9" id="stamp" style="border: none"></el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="5">
+          <div class="grid-content bg-white">
+            <p>Date</p>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div class="grid-content bg-purple-light gray-areas">
+            <p id="dte"></p>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content bg-white">
+            <p>#</p>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div class="grid-content bg-purple-light gray-areas">
+            <p id="rid"></p>
+          </div>
+        </el-col>
+      </el-row>
+    </el-card>
+
+    <!------       Confirmation text       ------>
+    <div class="text-div">
+      <p id="text"></p>
+    </div>
+  </div>
+</template>
+
+<script>
+    export default {
+      name: "dailyrecord",
+      data(){
+        return {
+          date: "",
+          currentdate: "",
+          yesterday: "",
+          recid: "",
+          totalprice: "",
+          username: "",
+          userid: "",
+          receipts: [],
+        }
+      },
+
+      mounted: function() {
+        //set the current day to today
+        const toTwoDigits = num => num < 10 ? '0' + num : num;
+        let today = new Date();
+        let year = today.getFullYear();
+        let month = toTwoDigits(today.getMonth() + 1);
+        let day = toTwoDigits(today.getDate());
+        this.currentdate = `${year}-${month}-${day}`;
+
+        //set the last date to yesterday
+        this.yesterday = `${year}-${month}-${day-1}`;
+      },
+
+      methods: {
+        //------------        PRINT RECORD         ----------//
+        print: function() {
+          window.print();
+        },
+
+        //-------------    CREATE NEW RECORD    ------------//
+        createNewRecord: function() {
+          //get the data
+          var that = this;
+
+          let ran = Math.floor(Math.random() * 100000);
+          let tfr = `${that.yesterday} - ${that.currentdate}`;
+          let dte = that.currentdate;
+          let rid = `${ran}`;
+
+          console.log("Search called");
+          this.$axios.post('/api/financial/getReceipts', {
+            date: dte
+          })
+            .then(function(response) {
+              that.receipts = response.data;
+              console.log(that.receipts.recid, that.receipts.totalprice);
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+
+          //set the fields in the record field
+          document.getElementById("stamp").innerHTML = `<img src="stamp.jpg" id="stp" />`;
+          document.getElementById("tfr").setAttribute("style", "margin-top: 2px; margin-bottom: 2px;");
+          document.getElementById("tfr").innerHTML = tfr;
+          document.getElementById("dte").setAttribute("style", "margin-top: 2px; margin-bottom: 2px;");
+          document.getElementById("dte").innerHTML = dte;
+          document.getElementById("rid").setAttribute("style", "margin-top: 2px; margin-bottom: 2px;");
+          document.getElementById("rid").innerHTML = rid;
+          document.getElementById("text").innerHTML = `The following record is being provided by user ${this.username} and issed by the
+                                                            financial management department of the HIS hospital information system. For
+                                                            more information, please contact the financial managment department directly!`;
+        }
+      }
+    }
+</script>
+
+<style scoped>
+  .el-col {
+    margin: 0px;
+    border-radius: 2px;
+    border: solid 1px rgb(202, 201, 201);
+  }
+
+  .bg-white {
+    background: white;
+  }
+
+  .bg-purple-light {
+    background: #eff2f8;
+  }
+
+  .grid-content {
+    padding: 1px;
+    text-align: center;
+    border-radius: 4px;
+    min-height: 36px;
+  }
+
+  .row-bg {
+    background-color: #f9fafc;
+  }
+
+  .gray-areas {
+    margin-top: 7px;
+    margin-bottom: 7px;
+  }
+
+  .text-div {
+    top: 10vh;
+    left: 68vw;
+    position: absolute;
+    width: 24vw;
+    height: fit-content;
+    display: block;
+    word-break: normal;
+    word-wrap: normal;
+  }
+
+  #text {
+    font-family: Helvetica, sans-serif;
+    line-height: 190%
+  }
+
+  #stp {
+    padding-left: 15%;
+    height: 15%;
+    width: auto;
+  }
+</style>
