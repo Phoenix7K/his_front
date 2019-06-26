@@ -1,0 +1,303 @@
+<template>
+  <div id="disease">
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <el-input type="text" v-model="icdcode" placeholder="ICDCode" clearable></el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-input type="text" v-model="discode" placeholder="Disease Code" clearable></el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-input type="text" v-model="disname" placeholder="Name" clearable></el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-input type="text" v-model="discat" placeholder="Category" clearable></el-input>
+      </el-col>
+      <el-col :span="4">
+        <el-button icon="el-icon-search" type="primary" @click="search">Search</el-button>
+      </el-col>
+      <el-col :span="4">
+        <el-button icon="el-icon-circle-plus-outline" type="primary" @click="showDialogForm('Add')">Add
+        </el-button>
+      </el-col>
+    </el-row>
+
+
+    <template>
+      <el-table
+        :data="disease.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+        style="width: 100%">
+        <el-table-column
+          prop="icdcode"
+          label="ICDCode"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="discode"
+          label="Disease Code"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="disname"
+          label="Name"
+          width="250">
+        </el-table-column>
+        <el-table-column
+          prop="discat"
+          label="Category">
+        </el-table-column>
+        <el-table-column fixed="right" label="Operations" width="120">
+          <template slot-scope="scope">
+            <el-button @click="showDeleteDialogForm(scope.$index, scope.row)" type="text" size="small">delete
+            </el-button>
+            <el-button @click="showDialogForm('Update',scope.$index, scope.row)" type="text" size="small">
+              update
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 40]"
+
+        :page-size="pagesize"
+        :hide-on-single-page="value"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="disease.length">
+      </el-pagination>
+
+    </template>
+
+    <el-dialog :title="formTitle" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item v-if="methodType=='Add'" label="ICDCode" :label-width="formLabelWidth">
+          <el-input v-model="form.icdcode" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Disease Code" :label-width="formLabelWidth">
+          <el-input v-model="form.discode" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Name" :label-width="formLabelWidth">
+          <el-input v-model="form.disname" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="Category" :label-width="formLabelWidth">
+          <el-input v-model="form.discat" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="onSubmit">{{methodType}}</el-button>
+      </div>
+    </el-dialog>
+
+    <!--    Delete Dialogue -->
+    <el-dialog
+      title="Confirm Delete"
+      :visible.sync="deleteDialogVisible"
+      width="30%"
+    >
+      <span>Are you sure you want to delete this?</span>
+      <span slot="footer" class="dialog-footer">
+            <el-button @click="deleteDialogVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="delDis">Confirm</el-button>
+        </span>
+    </el-dialog>
+
+  </div>
+</template>
+
+<script>
+    export default {
+      name: "disease",
+      data(){
+        return{
+          icdcode: "",
+          discode: "",
+          disname: "",
+          discat: "",
+          disease: [],
+
+          value: false,
+          currentPage: 1, //初始页
+          pagesize: 10,    //    每页的数据
+
+          deleteDialogVisible: false,//控制弹出删除窗口
+          deletingIndex: -1,
+          deletingObject:{},
+
+          methodType: "",//调用方法，add or update
+          formTitle:"",
+          dialogFormVisible: false,
+          updatingIndex:-1,
+          updatingObject:{},
+          form: {
+            icdcode: "",
+            discode: "",
+            disname: "",
+            discat:"",
+          },
+          formLabelWidth: '120px'
+        }
+      },
+      mounted: function(){
+        console.log("refresh!!!")
+        this.currentPage = 1;
+        var that = this;
+        this.$axios.post('/api/management/dis', {})
+          .then(function (response) {
+            console.log(response.data);
+            that.disease = response.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+
+      methods: {
+        search: function () {
+          this.currentPage = 1;
+          var that = this;
+          this.$axios.post('/api/management/dis', {
+            icdcode: that.icdcode,
+            discode: that.discode,
+            disname: that.disname,
+            discat: that.discat,
+          })
+            .then(function (response) {
+              console.log(response.data);
+              that.disease = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+
+        refresh: function () {
+          this.currentPage = 1;
+          var that = this;
+          this.$axios.post('/api/management/dis', {
+            icdcode: "",
+            discode: "",
+            disname: "",
+            discat: "",
+          })
+            .then(function (response) {
+              console.log(response.data);
+              that.disease = response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+
+        onSubmit: function(){
+          if(this.methodType=="Add")
+            this.onSubmitAdd();
+          if(this.methodType=="Update")
+            this.onSubmitUpdate();
+          this.dialogFormVisible = false;
+          this.refresh();
+        },
+
+        onSubmitAdd: function(){
+          var that = this;
+          console.log(that.form);
+          this.$axios.post('/api/management/addDis', {
+            icdcode: that.form.icdcode,
+            discode: that.form.discode,
+            disname: that.form.disname,
+            discat: that.form.discat,
+          })
+            .then(function (response) {
+              console.log(response.data);
+              that.refresh();
+              // that.depts=response.data;
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+
+        onSubmitUpdate: function () {
+          var that = this;
+          console.log(that.form);
+          this.$axios.post('/api/management/updateDis', {
+            icdcode: that.form.icdcode,
+            discode: that.form.discode,
+            disname: that.form.disname,
+            discat: that.form.discat,
+          }) .then(function (response) {
+            console.log(response.data);
+            that.refresh();
+            // that.depts=response.data;
+          })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+
+        showDeleteDialogForm: function(index, row){
+          this.deleteDialogVisible = true;
+          this.deletingIndex = index;
+          this.deletingObject = row;
+        },
+
+        delDis: function () {
+          var that = this;
+          var params = new URLSearchParams();
+          params.append('icdcode', this.deletingObject.icdcode);
+          this.$axios.post('/api/management/delDis', params)
+            .then(function (response) {
+              that.refresh();
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.deleteDialogVisible = false;
+        },
+
+        showDialogForm: function (method,index,row) {
+          if (method == "Add") {
+            this.form = {
+              icdcode: "",
+              discode: "",
+              disname: "",
+              discat: "",
+            }
+          }
+          if (method == "Update"){
+            this.form = {
+              icdcode: row.icdcode,
+              discode: row.discode,
+              disname: row.disname,
+              discat: row.discat,
+            }
+          }
+          // console.log(this.form);
+
+          this.dialogFormVisible = true;
+          this.methodType = method;
+          this.formTitle = method + " Disease";
+          this.updatingIndex = index;
+          this.updatingObject = row;
+        },
+
+
+
+        handleSizeChange: function(pagesize) {
+          this.pagesize = pagesize;
+          console.log(pagesize);
+        },
+        handleCurrentChange: function(currentPage) {
+          this.currentPage = currentPage;
+          console.log(currentPage);
+        }
+      }
+    }
+</script>
+
+<style scoped>
+
+</style>

@@ -119,7 +119,6 @@
         },
         formLabelWidth: '120px',
       };
-
     },
 
     mounted: function () {
@@ -278,6 +277,7 @@
         this.pagesize = pagesize;
         console.log(pagesize);
       },
+
       handleCurrentChange: function (currentPage) {
         this.currentPage = currentPage;
         console.log(currentPage);
