@@ -22,6 +22,9 @@ import register from "@/components/register/register";
 import cancel_register from "@/components/register/cancel_register";
 import receipt_preview from "@/components/register/receipt_preview";
 import dailyrecord from "@/components/financial/dailyrecord";
+import medicine from "@/components/pharmacy/medicine";
+import send from "@/components/pharmacy/send";
+import returnM from "@/components/pharmacy/returnM";
 
 Vue.use(Router)
 
@@ -122,6 +125,21 @@ export default new Router({
       path: '/dailyrecord',
       name: 'dailyrecord',
       component: dailyrecord
+    },
+    {
+      path: '/medicine',
+      name: 'medicine',
+      component: medicine
+    },
+    {
+      path: '/send',
+      name: 'send',
+      component: send
+    },
+    {
+      path: '/returnM',
+      name: 'returnM',
+      component: returnM
     }
   ]
 })
