@@ -145,7 +145,7 @@
         console.log("refresh!!!")
         this.currentPage = 1;
         var that = this;
-        this.$axios.post('/apimanagement/dis', {})
+        this.$axios.post('/api/management/dis', {})
           .then(function (response) {
             console.log(response.data);
             that.disease = response.data;

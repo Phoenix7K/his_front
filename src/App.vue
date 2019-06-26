@@ -7,36 +7,35 @@
             <el-menu-item index="1">处理中心</el-menu-item>
             <el-submenu index="2">
               <template slot="title">Management</template>
-              <el-menu-item index="2-1" @click="naviTo('dept')">Departments</el-menu-item>
-              <el-menu-item index="2-2">Diagnostic Catalog</el-menu-item>
-              <el-menu-item index="2-3" @click="naviTo('non_medic')">Non-Medical Charge</el-menu-item>
-              <el-menu-item index="2-4" @click="naviTo('shift')">Shift</el-menu-item>
-              <el-menu-item index="2-5" @click="naviTo('user')">Users</el-menu-item>
-              <el-menu-item index="2-5" @click="naviTo('constant')">Constants</el-menu-item>
-              <el-menu-item index="2-5" @click="naviTo('disease')">Diagnosis Catalog</el-menu-item>
+              <el-menu-item index="2-1" @click="naviTo('constant')">Constants</el-menu-item>
+              <el-menu-item index="2-2" @click="naviTo('dept')">Departments</el-menu-item>
+              <el-menu-item index="2-3" @click="naviTo('disease')">Diagnostic Catalog</el-menu-item>
+              <el-menu-item index="2-4" @click="naviTo('non_medic')">Non-Medical Charge</el-menu-item>
+              <el-menu-item index="2-5" @click="naviTo('shift')">Shift</el-menu-item>
+              <el-menu-item index="2-6" @click="naviTo('user')">Users</el-menu-item>
             </el-submenu>
             <el-submenu index="3">
               <template slot="title">Register&Payment</template>
-              <el-menu-item index="3-1" @click="naviTo('register')">Register</el-menu-item>
-              <el-menu-item index="3-2" @click="naviTo('receipt')">Receipt</el-menu-item>
-              <el-menu-item index="3-3" @click="naviTo('bill')">Bill</el-menu-item>
-              <el-menu-item index="3-4" @click="naviTo('cancel_register')">Cancel Registration</el-menu-item>
+              <el-menu-item index="3-1" @click="naviTo('bill')">Bill</el-menu-item>
+              <el-menu-item index="3-2" @click="naviTo('cancel_register')">Cancel Registration</el-menu-item>
+              <el-menu-item index="3-3" @click="naviTo('receipt')">Receipt</el-menu-item>
+              <el-menu-item index="3-4" @click="naviTo('register')">Register</el-menu-item>
             </el-submenu>
             <el-submenu index="4">
               <template slot="title">Outpatient</template>
               <el-menu-item index="4-1" @click="naviTo('homepage')">Homepage</el-menu-item>
-              <el-menu-item index="4-2">Template Management</el-menu-item>
+              <el-menu-item index="4-2" @click="naviTo('templates')">Template Management</el-menu-item>
             </el-submenu>
             <el-submenu index="5">
               <template slot="title">Medical Treatment</template>
               <el-menu-item index="5-1" @click="naviTo('exam')">Examination</el-menu-item>
-              <el-menu-item index="5-2" @click="naviTo('medtech')">Medical Management</el-menu-item>
+              <el-menu-item index="5-2" @click="naviTo('medtech')">Medical-Tech</el-menu-item>
             </el-submenu>
             <el-submenu index="6">
               <template slot="title">Pharmacy</template>
-              <el-menu-item index="6-1">Send Medicine</el-menu-item>
-              <el-menu-item index="6-2">Return Medicine</el-menu-item>
-              <el-menu-item index="6-3">Medicine Management</el-menu-item>
+              <el-menu-item index="6-1" @click="naviTo('medicine')">Medicine Management</el-menu-item>
+              <el-menu-item index="6-2" @click="naviTo('returnM')">Return Medicine</el-menu-item>
+              <el-menu-item index="6-3" @click="naviTo('send')">Send Medicine</el-menu-item>
             </el-submenu>
             <el-submenu index="7">
               <template slot="title">Financial</template>

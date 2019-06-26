@@ -8,6 +8,7 @@ import disease from "@/components/management/disease";
 import non_medic from "@/components/management/non_medic";
 import shift from "@/components/management/shift";
 import homepage from "@/components/outpatient/homepage";
+import templates from "@/components/outpatient/templates";
 import frontpage from "@/components/outpatient/homepageSub/frontpage";
 import examination from "@/components/outpatient/homepageSub/examination";
 import inspection from "@/components/outpatient/homepageSub/inspection";
@@ -24,6 +25,9 @@ import receipt_preview from "@/components/register/receipt_preview";
 import dailyrecord from "@/components/financial/dailyrecord";
 import exam from "@/components/medtech/exam";
 import medtech from "@/components/medtech/medtech";
+import medicine from "@/components/pharmacy/medicine";
+import send from "@/components/pharmacy/send";
+import returnM from "@/components/pharmacy/returnM";
 
 Vue.use(Router)
 
@@ -64,6 +68,11 @@ export default new Router({
       path: '/shift',
       name: 'Shift',
       component: shift
+    },,
+    {
+      path: '/templates',
+      name: 'Templates',
+      component: templates
     },
     {
       path: '/homepage',
@@ -134,6 +143,21 @@ export default new Router({
       path: '/medtech',
       name: 'medtech',
       component: medtech
+    },
+    {
+      path: '/medicine',
+      name: 'medicine',
+      component: medicine
+    },
+    {
+      path: '/send',
+      name: 'send',
+      component: send
+    },
+    {
+      path: '/returnM',
+      name: 'returnM',
+      component: returnM
     }
   ]
 })
