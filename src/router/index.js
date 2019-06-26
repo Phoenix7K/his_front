@@ -22,6 +22,8 @@ import register from "@/components/register/register";
 import cancel_register from "@/components/register/cancel_register";
 import receipt_preview from "@/components/register/receipt_preview";
 import dailyrecord from "@/components/financial/dailyrecord";
+import exam from "@/components/medtech/exam";
+import medtech from "@/components/medtech/medtech";
 
 Vue.use(Router)
 
@@ -122,6 +124,16 @@ export default new Router({
       path: '/dailyrecord',
       name: 'dailyrecord',
       component: dailyrecord
+    },
+    {
+      path: '/exam',
+      name: 'exam',
+      component: exam
+    },
+    {
+      path: '/medtech',
+      name: 'medtech',
+      component: medtech
     }
   ]
 })

@@ -29,8 +29,8 @@
             </el-submenu>
             <el-submenu index="5">
               <template slot="title">Medical Treatment</template>
-              <el-menu-item index="5-1">Examination</el-menu-item>
-              <el-menu-item index="5-2">Medical Management</el-menu-item>
+              <el-menu-item index="5-1" @click="naviTo('exam')">Examination</el-menu-item>
+              <el-menu-item index="5-2" @click="naviTo('medtech')">Medical Management</el-menu-item>
             </el-submenu>
             <el-submenu index="6">
               <template slot="title">Pharmacy</template>
