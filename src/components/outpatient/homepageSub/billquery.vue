@@ -211,8 +211,8 @@
       tryCompletePInfo: function () {
         console.log("Complete PInfo")
         var that = this;
-        axios({
-          url: '/registration/tryCompletePatientInfo',
+        this.$axios({
+          url: '/api/registration/tryCompletePatientInfo',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
           data: {id: that.searchingPid},
@@ -255,7 +255,7 @@
 
       getBills() {
         var that = this;
-        axios({
+        this.$axios({
           url: '/charge/getBills',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
@@ -273,7 +273,7 @@
 
       getUnpaidBills() {
         var that = this;
-        axios({
+        this.$axios({
           url: '/charge/getUnpaidBills',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
@@ -291,7 +291,7 @@
 
       getUndoneBills() {
         var that = this;
-        axios({
+        this.$axios({
           url: '/charge/getUndoneBills',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
@@ -338,7 +338,7 @@
       submitCharge() {
         console.log("submitCharge")
         var that = this;
-        axios({
+        this.$axios({
           url: '/charge/changeStatesToPaid',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
@@ -358,7 +358,7 @@
       submitRefund() {
         console.log("submitRefund")
         var that = this;
-        axios({
+        this.$axios({
           url: '/charge/refundBill',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
@@ -377,7 +377,7 @@
 //---------------------Preview Receipt----------------
       logReceipt() {
         var that = this;
-        axios({
+        this.$axios({
           url: '/charge/logReceipt',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
@@ -429,7 +429,7 @@
        * */
       calculateTotalPrice() {
         var that = this;
-        axios({
+        this.$axios({
           url: '/charge/getPrintedTotalPrice',
           method: 'post',
           contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
