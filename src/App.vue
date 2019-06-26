@@ -41,8 +41,8 @@
             <el-submenu index="7">
               <template slot="title">Financial</template>
               <el-menu-item index="7-1" @click="naviTo('dailyrecord')">Daily Record</el-menu-item>
-              <el-menu-item index="7-2">Departments</el-menu-item>
-              <el-menu-item index="7-3">Doctors</el-menu-item>
+              <el-menu-item index="7-2" @click="naviTo('depts')">Departments</el-menu-item>
+              <el-menu-item index="7-3" @click="naviTo('doctors')">Doctors</el-menu-item>
             </el-submenu>
             <el-menu-item style="float: right;margin-right: 30px">
               <el-row type="flex" justify="space-between">
