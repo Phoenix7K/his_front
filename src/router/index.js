@@ -25,6 +25,8 @@ import receipt_preview from "@/components/register/receipt_preview";
 import dailyrecord from "@/components/financial/dailyrecord";
 import exam from "@/components/medtech/exam";
 import medtech from "@/components/medtech/medtech";
+import depts from "@/components/financial/depts";
+import doctors from "@/components/financial/doctors";
 import medicine from "@/components/pharmacy/medicine";
 import send from "@/components/pharmacy/send";
 import returnM from "@/components/pharmacy/returnM";
@@ -68,11 +70,6 @@ export default new Router({
       path: '/shift',
       name: 'Shift',
       component: shift
-    },,
-    {
-      path: '/templates',
-      name: 'Templates',
-      component: templates
     },
     {
       path: '/homepage',
@@ -158,6 +155,16 @@ export default new Router({
       path: '/returnM',
       name: 'returnM',
       component: returnM
+    },
+    {
+      path: '/depts',
+      name: 'depts',
+      component: depts
+    },
+    {
+      path: '/doctors',
+      name: 'doctors',
+      component: doctors
     }
   ]
 })
