@@ -7,6 +7,15 @@ import constant from "@/components/management/constant";
 import disease from "@/components/management/disease";
 import non_medic from "@/components/management/non_medic";
 import shift from "@/components/management/shift";
+import homepage from "@/components/outpatient/homepage";
+import frontpage from "@/components/outpatient/homepageSub/frontpage";
+import examination from "@/components/outpatient/homepageSub/examination";
+import inspection from "@/components/outpatient/homepageSub/inspection";
+import treatment from "@/components/outpatient/homepageSub/treatment";
+import diagconfirm from "@/components/outpatient/homepageSub/diagconfirm";
+import patentmed from "@/components/outpatient/homepageSub/patentmed";
+import herbal from "@/components/outpatient/homepageSub/herbal";
+import billquery from "@/components/outpatient/homepageSub/billquery";
 import bill from "@/components/register/bill";
 import receipt from "@/components/register/receipt";
 import register from "@/components/register/register";
@@ -53,6 +62,36 @@ export default new Router({
       path: '/shift',
       name: 'Shift',
       component: shift
+    },
+    {
+      path: '/homepage',
+      name: 'HomePage',
+      component: homepage,
+      children:[{
+        path: '/frontpage',
+        component: frontpage,
+      },{
+        path: '/examination',
+        component: examination,
+      },{
+        path: '/inspection',
+        component: inspection,
+      },{
+        path: '/treatment',
+        component: treatment,
+      },{
+        path: '/diagconfirm',
+        component: diagconfirm,
+      },{
+        path: '/patentmed',
+        component: patentmed,
+      },{
+        path: '/herbal',
+        component: herbal,
+      },{
+        path: '/billquery',
+        component: billquery,
+      }]
     },
     {
       path: '/bill',

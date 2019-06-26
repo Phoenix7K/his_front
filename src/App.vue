@@ -23,7 +23,7 @@
             </el-submenu>
             <el-submenu index="4">
               <template slot="title">Outpatient</template>
-              <el-menu-item index="4-1">Homepage</el-menu-item>
+              <el-menu-item index="4-1" @click="naviTo('homepage')">Homepage</el-menu-item>
               <el-menu-item index="4-2">Template Management</el-menu-item>
             </el-submenu>
             <el-submenu index="5">
