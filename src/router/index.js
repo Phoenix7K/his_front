@@ -70,6 +70,10 @@ export default new Router({
       path: '/shift',
       name: 'Shift',
       component: shift
+    },{
+      path: '/templates',
+      name: 'Templates',
+      component: templates
     },
     {
       path: '/homepage',
