@@ -190,8 +190,8 @@
         });
     },
 
-    components:{
-      "detailDiag":detailDiag,
+    components: {
+      "detailDiag": detailDiag,
     },
 
 

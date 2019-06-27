@@ -113,6 +113,7 @@
 
   export default {
     name: "frontpage",
+    inject: ['loadPatientList','switchStep','resetActiveTab'],
     data() {
       var validateDisType = (form, value, callback) => {
 
@@ -173,7 +174,7 @@
 
     methods: {
       onSubmit() {
-        var that = this;
+
         this.$confirm('Sure to Submit?', 'Notice', {
           confirmButtonText: 'Confirm',
           cancelButtonText: 'Cancel',
@@ -195,15 +196,17 @@
             regid: this.regid,
 
           }).then(function () {
-            that.$parent.homepage.loadPatientList();
-            that.$parent.homepage.switchStep(2);
-            that.$parent.homepage.resetActiveTab();
-            that.loadFrontPage();
+            that.loadPatientList();
+            that.switchStep(2);
+            that.resetActiveTab();
+            that.buttonText = 'Submitted';
+            that.buttonDisabled = true;
+            that.buttonCType = 'success';
+
           })
             .catch(function (error) {
               console.log(error);
             });
-
 
           this.$message({
             type: 'success',
@@ -215,7 +218,6 @@
             message: 'Submit Save.'
           });
         });
-
 
       },
       resetForm(formName) {

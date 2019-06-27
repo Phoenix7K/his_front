@@ -85,7 +85,8 @@
 
       <el-form-item>
         <el-button icon="el-icon-circle-check" type="primary" @click="onSubmit"
-                   :type="buttonCType" :disabled="buttonDisabled">{{buttonText}}</el-button>
+                   :type="buttonCType" :disabled="buttonDisabled">{{buttonText}}
+        </el-button>
         <el-button icon="el-icon-document" type="primary" @click="onSave">Save</el-button>
         <el-button icon="el-icon-refresh" @click="resetForm('form')">Reset</el-button>
       </el-form-item>
@@ -98,235 +99,238 @@
   //局部注册组件
   import addDisease from '../dialog/addDisease'
 
-    export default {
-        name: "diagconfirm",
-      data() {
-        var validateDisType = (form, value, callback) => {
+  export default {
+    name: "diagconfirm",
+    inject: ['loadPatientList', 'switchStep', 'resetActiveTab'],
+    data() {
+      var validateDisType = (form, value, callback) => {
 
-          if (value === '') {
-            return callback(new Error('Please Select Type!'));
-          } else {
-            callback();
-          }
-        };
-        return {
-          regid: 0,
-          pid: 0,
-          pname: '',
-          pgender: '',
-          active:0,
-          form: {
-
-            examResult: '',
-            disType: '',
-            treatAdvice: '',
-          },
-          disease: [],
-          rules: {
-            disType: [
-              {validator: validateDisType, trigger: 'blur'}
-            ]
-          },
-          isDisabled: false,
-
-          buttonText: 'Submit',
-          buttonDisabled: false,
-          buttonCType: 'primary',
+        if (value === '') {
+          return callback(new Error('Please Select Type!'));
+        } else {
+          callback();
         }
-      },
+      };
+      return {
+        regid: 0,
+        pid: 0,
+        pname: '',
+        pgender: '',
+        active: 0,
+        form: {
 
-      mounted: function () {
-
-        this.loadBasicInfo();
-
-        this.loadFrontPage();
-      },
-
-      components:{
-        "addDisease":addDisease,
-      },
-
-      methods: {
-        onSubmit() {
-          var that = this;
-          this.$confirm('Sure to Submit?', 'Notice', {
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-          }).then(() => {
-            console.log('submit!');
-            this.form.state = '确诊提交';
-            var that = this;
-            this.$axios.post('/api/outpatient/updateHomepage', {
-              regid: this.regid,
-              homepage: this.form,
-            })
-              .catch(function (error) {
-                console.log(error);
-              });
-
-            this.$axios.post('/api/outpatient/updatePatientState', {
-              state: 4,
-              regid: this.regid,
-
-            }).then(function () {
-              that.$parent.loadPatientList();
-              that.$parent.switchStep(4);
-              that.$parent.resetActiveTab();
-              that.loadFrontPage();
-            })
-              .catch(function (error) {
-                console.log(error);
-              });
-
-
-            this.$message({
-              type: 'success',
-              message: 'Submit Succeed!'
-            });
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: 'Submit Save.'
-            });
-          });
+          examResult: '',
+          disType: '',
+          treatAdvice: '',
         },
-        resetForm(formName) {
-          this.$refs[formName].resetFields();
-          this.form.disType = '';
+        disease: [],
+        rules: {
+          disType: [
+            {validator: validateDisType, trigger: 'blur'}
+          ]
         },
-        deleteRow(index, row) {
+        isDisabled: false,
+
+        buttonText: 'Submit',
+        buttonDisabled: false,
+        buttonCType: 'primary',
+      }
+    },
+
+    mounted: function () {
+
+      this.loadBasicInfo();
+
+      this.loadFrontPage();
+    },
+
+    components: {
+      "addDisease": addDisease,
+    },
+
+    methods: {
+      onSubmit() {
+        var that = this;
+        this.$confirm('Sure to Submit?', 'Notice', {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          console.log('submit!');
+          this.form.state = '确诊提交';
           var that = this;
-          var params = new URLSearchParams();
-          params.append("regid", this.regid);
-          params.append("icdcode", row.icdcode);
-          console.log(params);
-          this.$axios.post('/api/outpatient/deleteDiseaseFromDiag', params)
-            .then(function (response) {
-              console.log("退出这个舞台");
-              that.loadPartPage();
-            })
+          this.$axios.post('/api/outpatient/updateHomepage', {
+            regid: this.regid,
+            homepage: this.form,
+          })
             .catch(function (error) {
               console.log(error);
             });
-        },
-        addDiseaseDialog(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              console.log("wo tm add bao!");
-              this.$refs.addDisease.regid = this.regid;
-              this.$refs.addDisease.dialogVisible = true;
-              this.$refs.addDisease.discode = '';
-              this.$refs.addDisease.diseases = null;
-            } else {
-              console.log('Error Submit!!');
-              return false;
-            }
+
+          this.$axios.post('/api/outpatient/updatePatientState', {
+            state: 4,
+            regid: this.regid,
+
+          }).then(function () {
+            that.loadPatientList();
+            that.switchStep(4);
+            that.resetActiveTab();
+            that.buttonText = 'Submitted';
+            that.buttonDisabled = true;
+            that.buttonCType = 'success';
+          })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+
+          this.$message({
+            type: 'success',
+            message: 'Submit Succeed!'
           });
-        },
-        loadBasicInfo() {
-          this.pid = this.$route.query.pid;
-          var that = this;
-          var params = new URLSearchParams();
-          params.append("pid", this.pid);
-          this.$axios.post('/api/outpatient/getPatientByPid', params)
-            .then(function (response) {
-              that.pname = response.data.pname;
-              if (response.data.pgender === 1) {
-                that.pgender = 'Male'
-              } else {
-                that.pgender = 'Female'
-              }
-            }).catch(function (error) {
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'Submit Save.'
+          });
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+        this.form.disType = '';
+      },
+      deleteRow(index, row) {
+        var that = this;
+        var params = new URLSearchParams();
+        params.append("regid", this.regid);
+        params.append("icdcode", row.icdcode);
+        console.log(params);
+        this.$axios.post('/api/outpatient/deleteDiseaseFromDiag', params)
+          .then(function (response) {
+            console.log("退出这个舞台");
+            that.loadPartPage();
+          })
+          .catch(function (error) {
             console.log(error);
           });
-        },
-        loadPartPage() {
-          var params = new URLSearchParams();
-          params.append("regid", this.regid);
-          var that = this;
-          this.$axios.post('/api/outpatient/getFrontPageByRegid', params)
-            .then(function (response) {
-              console.log(response.data);
-              that.form.diseaseList = response.data.diseaseList;
-              if (that.form.diseaseList.length >= 5) {
-                console.log("把嘴给我闭上");
-                that.isDisabled = true;
-              } else {
-                that.isDisabled = false;
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        },
-        loadFrontPage() {
-          this.regid = this.$route.query.regid;
-          this.active = this.$route.query.active;
-          var params = new URLSearchParams();
-          params.append("regid", this.regid);
-          var that = this;
-          this.$axios.post('/api/outpatient/getFrontPageByRegid', params)
-            .then(function (response) {
-              console.log(response.data);
-              that.form = response.data;
-              if (that.form.diseaseList.length >= 5) {
-                console.log("把嘴给我闭上");
-                that.isDisabled = true;
-              } else {
-                that.isDisabled = false;
-              }
-
-              /*if (that.form.diseaseList.length >= 1){
-                  that.isDisabledSelect = true;
-              }else{
-                  that.isDisabledSelect = false;
-              }*/
-
-              console.log("Parent Active = " + that.active)
-              if (parseInt(that.active) >= 4) {
-                that.buttonText = 'Submitted';
-                that.buttonDisabled = true;
-                that.buttonCType = 'success';
-              } else {
-                that.buttonText = 'Submit';
-                that.buttonDisabled = false;
-                that.buttonCType = 'primary';
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        },
-        onSave() {
-          this.$confirm('Sure to save?', 'Notice', {
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-          }).then(() => {
-            this.form.state = '确诊暂存';
-            this.$axios.post('/api/outpatient/updateHomepage', {
-              regid: this.regid,
-              homepage: this.form,
-            })
-              .catch(function (error) {
-                console.log(error);
-              });
-
-            this.$message({
-              type: 'success',
-              message: 'Save Succeed!'
-            });
-          }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: 'Cancel Save.'
-            });
+      },
+      addDiseaseDialog(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log("wo tm add bao!");
+            this.$refs.addDisease.regid = this.regid;
+            this.$refs.addDisease.dialogVisible = true;
+            this.$refs.addDisease.discode = '';
+            this.$refs.addDisease.diseases = null;
+          } else {
+            console.log('Error Submit!!');
+            return false;
+          }
+        });
+      },
+      loadBasicInfo() {
+        this.pid = this.$route.query.pid;
+        var that = this;
+        var params = new URLSearchParams();
+        params.append("pid", this.pid);
+        this.$axios.post('/api/outpatient/getPatientByPid', params)
+          .then(function (response) {
+            that.pname = response.data.pname;
+            if (response.data.pgender === 1) {
+              that.pgender = 'Male'
+            } else {
+              that.pgender = 'Female'
+            }
+          }).catch(function (error) {
+          console.log(error);
+        });
+      },
+      loadPartPage() {
+        var params = new URLSearchParams();
+        params.append("regid", this.regid);
+        var that = this;
+        this.$axios.post('/api/outpatient/getFrontPageByRegid', params)
+          .then(function (response) {
+            console.log(response.data);
+            that.form.diseaseList = response.data.diseaseList;
+            if (that.form.diseaseList.length >= 5) {
+              console.log("把嘴给我闭上");
+              that.isDisabled = true;
+            } else {
+              that.isDisabled = false;
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
           });
-        }
+      },
+      loadFrontPage() {
+        this.regid = this.$route.query.regid;
+        this.active = this.$route.query.active;
+        var params = new URLSearchParams();
+        params.append("regid", this.regid);
+        var that = this;
+        this.$axios.post('/api/outpatient/getFrontPageByRegid', params)
+          .then(function (response) {
+            console.log(response.data);
+            that.form = response.data;
+            if (that.form.diseaseList.length >= 5) {
+              console.log("把嘴给我闭上");
+              that.isDisabled = true;
+            } else {
+              that.isDisabled = false;
+            }
 
+            /*if (that.form.diseaseList.length >= 1){
+                that.isDisabledSelect = true;
+            }else{
+                that.isDisabledSelect = false;
+            }*/
+
+            console.log("Parent Active = " + that.active)
+            if (parseInt(that.active) >= 4) {
+              that.buttonText = 'Submitted';
+              that.buttonDisabled = true;
+              that.buttonCType = 'success';
+            } else {
+              that.buttonText = 'Submit';
+              that.buttonDisabled = false;
+              that.buttonCType = 'primary';
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      onSave() {
+        this.$confirm('Sure to save?', 'Notice', {
+          confirmButtonText: 'Confirm',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          this.form.state = '确诊暂存';
+          this.$axios.post('/api/outpatient/updateHomepage', {
+            regid: this.regid,
+            homepage: this.form,
+          })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+          this.$message({
+            type: 'success',
+            message: 'Save Succeed!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: 'Cancel Save.'
+          });
+        });
       }
+
     }
+  }
 </script>
 
 <style scoped>
