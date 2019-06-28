@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld';
+import login_banner from '@/components/login_banner';
 import dept from "@/components/management/dept";
 import user from "@/components/management/user";
 import constant from "@/components/management/constant";
@@ -40,6 +41,11 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/',
+      name: 'login_banner',
+      component: login_banner
     },
     {
       path: '/dept',
