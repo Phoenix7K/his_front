@@ -1,0 +1,103 @@
+<!--<link href="../assets/css/bootstrap.min.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/font-awesome.min.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/flaticon-set.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/magnific-popup.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/owl.carousel.min.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/owl.theme.default.min.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/animate.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/bootsnav.css" rel="stylesheet" />-->
+<!--<link href="../assets/css/style.css" rel="stylesheet">-->
+<!--<link href="../assets/css/responsive.css" rel="stylesheet" />-->
+<!-- ========== End Stylesheet ========== -->
+
+<!--&lt;!&ndash; HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries &ndash;&gt;-->
+<!--&lt;!&ndash; WARNING: Respond.js doesn't work if you view the page via file:// &ndash;&gt;-->
+<!--&lt;!&ndash;[if lt IE 9]>-->
+<!--<script src="assets/js/html5/html5shiv.min.js"></script>-->
+<!--<script src="assets/js/html5/respond.min.js"></script>-->
+<!--<![endif]&ndash;&gt;-->
+
+<!--&lt;!&ndash; ========== Google Fonts ========== &ndash;&gt;-->
+<!--<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">-->
+<!--<link href="https://fonts.googleapis.com/css?family=Poppins:300,500,600,700,800" rel="stylesheet">-->
+
+<template>
+  <!-- Start Banner
+  ============================================= -->
+  <div class="banner-area responsive-auto-height text-small">
+    <div class="item shadow dark text-light bg-fixed" style="background-image: url(../assets/img/banner/4.jpg);">
+      <div class="box-table">
+        <div class="box-cell">
+          <div class="container">
+            <div class="row">
+              <div class="content double-items">
+
+                <div class="col-md-7 col-sm-6">
+                  <h1 data-animation="animated slideInRight">Best care for your <span> Good health</span></h1>
+                  <p data-animation="animated slideInUp">
+                    The ourselves suffering the sincerity. Inhabit her manners adapted age certain. Debating offended at branched striking be subjects.
+                  </p>
+                  <a data-animation="animated slideInUp" class="btn btn-light border btn-md" href="#">View Details</a>
+                </div>
+
+                <!-- Start Appoinment Form -->
+                <div class="col-md-5 col-sm-6 appoinment">
+                  <div class="appoinment-box">
+                    <div class="heading">
+                      <h2>Make an Appointment</h2>
+                    </div>
+                    <form action="#">
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <input class="form-control" id="name" name="name" placeholder="Name" type="text">
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <select>
+                              <option value="1">Male</option>
+                              <option value="2">Female</option>
+                              <option value="3">Child</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <select>
+                              <option value="1">Department</option>
+                              <option value="2">Medecine</option>
+                              <option value="4">Dental Care</option>
+                              <option value="5">Traumatology</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <button type="submit" name="submit" id="submit">
+                            Submit Query <i class="fa fa-paper-plane"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <!-- End Appoinment Form -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Banner -->
+</template>
+
+<script>
+    export default {
+        name: "login_banner"
+    }
+</script>
+
+<style scoped>
+
+</style>
