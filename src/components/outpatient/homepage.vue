@@ -91,7 +91,7 @@
         </template>
       </el-col>
       <el-col :span="4" style="margin-left: 10px;margin-top: 45px;height: 600px">
-        <el-steps direction="vertical" finish-status="success" process-status="finish" :active="active">
+        <el-steps direction="vertical" finish-status="success" process-status="finish" :active="active" v-if="isCollapse">
           <el-step icon="el-icon-edit-outline" title="Register"></el-step>
           <el-step icon="el-icon-document-remove" title="Pre-Diagnose"></el-step>
           <el-step icon="el-icon-search" title="Examine"></el-step>
@@ -105,11 +105,14 @@
 </template>
 
 <script>
-    export default {
+
+  export default {
       name:"homepage",
 
       data() {
         return {
+          showBar:true,
+
           url: '',
           isCollapse: true,
           activeName: 'frontpage',
@@ -136,6 +139,15 @@
           tabDisabled3: true,
         };
       },
+
+      provide(){
+        return{
+          loadPatientList: this.loadPatientList,
+          switchStep: this.switchStep,
+          resetActiveTab: this.resetActiveTab
+        }
+      },
+
       methods: {
         handleOpen(key, keyPath) {
           console.log(key, keyPath);
@@ -150,7 +162,7 @@
 
         },
 
-        loadPatientList() {
+        loadPatientList: function() {
           var that = this;
           this.$axios.post('/api/outpatient/getPatientsOfUserToday', {'userid': this.userid, 'state': 6})
             .then(function (response) {
@@ -186,7 +198,7 @@
             });
 
         },
-        resetActiveTab() {
+        resetActiveTab: function() {
 
           var that = this;
           this.$axios.post('/api/outpatient/getHomePageStateByRegid', {
@@ -255,7 +267,7 @@
           this.activeName = 'frontpage';
         },
 
-        switchStep(state) {
+        switchStep: function(state) {
           this.active = parseInt(state);
           console.log("switch step: " + state);
           if (parseInt(state) === 6) {

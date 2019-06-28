@@ -9,6 +9,7 @@ import disease from "@/components/management/disease";
 import non_medic from "@/components/management/non_medic";
 import shift from "@/components/management/shift";
 import homepage from "@/components/outpatient/homepage";
+import templates from "@/components/outpatient/templates";
 import frontpage from "@/components/outpatient/homepageSub/frontpage";
 import examination from "@/components/outpatient/homepageSub/examination";
 import inspection from "@/components/outpatient/homepageSub/inspection";
@@ -23,6 +24,8 @@ import register from "@/components/register/register";
 import cancel_register from "@/components/register/cancel_register";
 import receipt_preview from "@/components/register/receipt_preview";
 import dailyrecord from "@/components/financial/dailyrecord";
+import exam from "@/components/medtech/exam";
+import medtech from "@/components/medtech/medtech";
 import depts from "@/components/financial/depts";
 import doctors from "@/components/financial/doctors";
 import medicine from "@/components/pharmacy/medicine";
@@ -73,6 +76,10 @@ export default new Router({
       path: '/shift',
       name: 'Shift',
       component: shift
+    },{
+      path: '/templates',
+      name: 'Templates',
+      component: templates
     },
     {
       path: '/homepage',
@@ -133,6 +140,16 @@ export default new Router({
       path: '/dailyrecord',
       name: 'dailyrecord',
       component: dailyrecord
+    },
+    {
+      path: '/exam',
+      name: 'exam',
+      component: exam
+    },
+    {
+      path: '/medtech',
+      name: 'medtech',
+      component: medtech
     },
     {
       path: '/medicine',
