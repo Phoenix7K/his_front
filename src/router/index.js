@@ -43,7 +43,7 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path: '/',
+      path: '/login_banner',
       name: 'login_banner',
       component: login_banner
     },
