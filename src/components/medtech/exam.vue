@@ -449,6 +449,7 @@
         },
 
         ViewImages() {
+
           this.ViewDialogVisible = true;
           console.log(this.ViewImgUrls);
         }
