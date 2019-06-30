@@ -47,12 +47,12 @@
               <el-row type="flex" justify="space-between">
                 <el-col :span="10">
                   <el-tag style="font-family: 'Microsoft Sans Serif';" type="primary">
-                    {{this.usercat}}:{{this.username}}
+                    {{this.user.usercat}}:{{this.user.username}}
                   </el-tag>
                 </el-col>
                 <el-col :span="12" style="padding:0px">
                   <i class="el-icon-s-custom"></i>
-                  <el-button v-bind:type="loginButton" size="small" @click="">{{loginState}}</el-button>
+                  <el-button v-bind:type="loginButton" size="small" @click="logOut" v-if="loginBool">{{loginState}}</el-button>
                 </el-col>
               </el-row>
             </el-menu-item>
@@ -69,6 +69,7 @@
         <el-col :span="12">NEUEDU SOFT</el-col>
         <el-col :span="12">MaxSwen: 10086</el-col>
       </el-row>
+      <el-button @click="testAuth"></el-button>
     </el-footer>
   </div>
 </template>
@@ -76,13 +77,22 @@
 <script>
   export default {
     name: 'App',
+    provide(){
+      return{
+        loadUser: this.loadUser,
+      }
+    },
     data() {
       return {
+        loginBool:false,
         activeIndex: '1',
-        usercat: '',
-        username: '',
-        loginButton: 'primary',
-        loginState: 'LogIn'
+        user:{
+          userid:'',
+          usercat: '',
+          username: '',
+        },
+        loginButton: 'danger',
+        loginState: 'LogOut'
       };
     },
     methods: {
@@ -91,6 +101,30 @@
       },
       naviTo(url){
         this.$router.push({path:'/'+url})
+      },
+      loadUser:function(user){
+        this.user = user;
+        this.loginBool = true;
+      },
+      logOut(){
+        this.$router.push({path:'/login_banner'});
+        this.user = {};
+        this.loginBool = false;
+      },
+      testAuth(){
+          var that = this;
+          this.$axios({
+            url: '/api/redis/test',
+            method: 'post',
+            contentType: 'application/json',
+            headers: {'Authorization': this.$cookies.get('Authorization')},
+          })
+            .then(function (response) {
+              console.log(response.data);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
       }
     }
   }

@@ -4,67 +4,27 @@
     <img style="width: 100%; height: auto" src="../img/img_hospital.jpg">
     <div class="login-box">
       <img src="../img/avatar.png" class="avatar">
-      <h1>Login Here</h1>
-      <form>
-        <p>Username</p>
-        <input type="text" name="username" placeholder="Enter Username" v-model="username">
-        <p>Password</p>
-        <input type="password" name="password" placeholder="Enter Password" v-model="password">
-        <el-row justify="space-around">
-          <el-button type="primary" @click="onSubmit" round>Login</el-button>
-        </el-row>
-      </form>
+      <h1>Welcome, {{username}}!</h1>
     </div>
   </div>
+
 
 </template>
 
 <script>
   import img_hospital from '../img/img_hospital.jpg'
-    export default {
-        name: "login_banner",
-      inject: ['loadUser'],
-      data () {
-        return {
-          username: '',
-          password: ''
-        }
-      },
+  export default {
+    name: "login_welcome",
+    mounted(){
+      this.username = this.$route.query.username;
+    },
 
-      methods:{
-        onSubmit(){
-          var that = this;
-          this.$axios({
-            url: '/api/redis/login',
-            method: 'post',
-            contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
-            data: {
-              username: this.username,
-              password: this.password
-            }
-          })
-            .then(function (response) {
-              if(response.data.status === true){
-                that.$message({
-                  message: 'Login Success!',
-                  type: 'success'
-                });
-                console.log(response.data);
-                that.loadUser(response.data.user);
-                that.$cookies.set("Authorization", response.data.token);
-                that.$router.push({path:'/login_welcome',query:{username: that.username}});
-              }else{
-                that.$message('Login Failed!');
-                that.username = '';
-                that.password = '';
-              }
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        }
+    data () {
+      return {
+        username:'Max'
       }
     }
+  }
 </script>
 
 <style scoped>
@@ -80,7 +40,7 @@
   }
   .login-box{
     width: 320px;
-    height: 370px;
+    height: 200px;
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
     top: 50%;

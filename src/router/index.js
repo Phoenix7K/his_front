@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld';
 import login_banner from '@/components/login_banner';
+import login_welcome from '@/components/login_welcome';
 import dept from "@/components/management/dept";
 import user from "@/components/management/user";
 import constant from "@/components/management/constant";
@@ -46,6 +47,11 @@ export default new Router({
       path: '/login_banner',
       name: 'login_banner',
       component: login_banner
+    },
+    {
+      path: '/login_welcome',
+      name: 'login_welcome',
+      component: login_welcome
     },
     {
       path: '/dept',
