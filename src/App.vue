@@ -4,7 +4,7 @@
       <el-row style="height: 100px">
         <el-col :span="24">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-            <el-menu-item index="1">处理中心</el-menu-item>
+            <el-menu-item index="1" @click="naviTo('login_banner')">HomePage</el-menu-item>
             <el-submenu index="2">
               <template slot="title">Management</template>
               <el-menu-item index="2-1" @click="naviTo('constant')">Constants</el-menu-item>
@@ -102,7 +102,6 @@
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
   }
 </style>
