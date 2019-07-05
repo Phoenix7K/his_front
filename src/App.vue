@@ -69,7 +69,7 @@
         <el-col :span="12">NEUEDU SOFT</el-col>
         <el-col :span="12">MaxSwen: 10086</el-col>
       </el-row>
-      <el-button @click="testAuth"></el-button>
+      <el-button @click="authToken"></el-button>
     </el-footer>
   </div>
 </template>
@@ -80,6 +80,7 @@
     provide(){
       return{
         loadUser: this.loadUser,
+        authToken: this.authToken,
       }
     },
     data() {
@@ -163,7 +164,7 @@
         this.user = {};
         this.loginBool = false;
       },
-      testAuth(){
+      authToken(){
           var that = this;
           this.$axios({
             url: '/api/redis/test',
@@ -175,7 +176,16 @@
               console.log(response.data);
             })
             .catch(function (error) {
-              console.log(error);
+              if(error.response.status === 401){
+                that.user = {};
+                that.loginBool = false;
+                that.$router.push({path:'/login_banner'});
+                that.$notify({
+                  title: 'Unauthorized!',
+                  message: 'Please Re-Login',
+                  type: 'warning'
+                });
+              }
             });
       }
     }

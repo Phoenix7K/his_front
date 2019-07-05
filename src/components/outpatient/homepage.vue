@@ -109,6 +109,8 @@
   export default {
       name:"homepage",
 
+    inject:['authToken'],
+
       data() {
         return {
           showBar:true,
@@ -163,6 +165,7 @@
         },
 
         loadPatientList: function() {
+          this.authToken();
           var that = this;
           this.$axios.post('/api/outpatient/getPatientsOfUserToday', {'userid': this.userid, 'state': 6})
             .then(function (response) {
