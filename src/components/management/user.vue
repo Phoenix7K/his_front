@@ -334,8 +334,8 @@
           console.log("onSubmitAdd")
           console.log(this.users);
           var that = this;
-          axios({
-            url: '/management/addUser',
+          this.$axios({
+            url: '/api/management/addUser',
             method: 'post',
             contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
             data: this.form,
@@ -350,8 +350,8 @@
         onSubmitUpdate: function () {
           var that = this;
           console.log(that.form);
-          axios({
-            url: '/management/updateUser',
+          this.$axios({
+            url: '/api/management/updateUser',
             method: 'post',
             contentType: 'application/json', // 这句不加出现415错误:Unsupported Media Type
             data: this.form
