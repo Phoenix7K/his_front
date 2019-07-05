@@ -4,8 +4,8 @@
       <el-row style="height: 100px">
         <el-col :span="24">
           <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-            <el-menu-item index="1" @click="naviTo('login_banner')">HomePage</el-menu-item>
-            <el-submenu index="2">
+            <el-menu-item index="1" @click="naviTo('login_banner')" v-if="disabled.homepage">HomePage</el-menu-item>
+            <el-submenu index="2" v-if="disabled.management">
               <template slot="title">Management</template>
               <el-menu-item index="2-1" @click="naviTo('constant')">Constants</el-menu-item>
               <el-menu-item index="2-2" @click="naviTo('dept')">Departments</el-menu-item>
@@ -14,30 +14,30 @@
               <el-menu-item index="2-5" @click="naviTo('shift')">Shift</el-menu-item>
               <el-menu-item index="2-6" @click="naviTo('user')">Users</el-menu-item>
             </el-submenu>
-            <el-submenu index="3">
+            <el-submenu index="3" v-if="disabled.register">
               <template slot="title">Register&Payment</template>
               <el-menu-item index="3-1" @click="naviTo('bill')">Bill</el-menu-item>
               <el-menu-item index="3-2" @click="naviTo('cancel_register')">Cancel Registration</el-menu-item>
               <el-menu-item index="3-3" @click="naviTo('receipt')">Receipt</el-menu-item>
               <el-menu-item index="3-4" @click="naviTo('register')">Register</el-menu-item>
             </el-submenu>
-            <el-submenu index="4">
+            <el-submenu index="4" v-if="disabled.outpatient">
               <template slot="title">Outpatient</template>
               <el-menu-item index="4-1" @click="naviTo('homepage')">Homepage</el-menu-item>
               <el-menu-item index="4-2" @click="naviTo('templates')">Template Management</el-menu-item>
             </el-submenu>
-            <el-submenu index="5">
+            <el-submenu index="5" v-if="disabled.medtech">
               <template slot="title">Medical Treatment</template>
               <el-menu-item index="5-1" @click="naviTo('exam')">Examination</el-menu-item>
               <el-menu-item index="5-2" @click="naviTo('medtech')">Medical-Tech</el-menu-item>
             </el-submenu>
-            <el-submenu index="6">
+            <el-submenu index="6" v-if="disabled.pharmacy">
               <template slot="title">Pharmacy</template>
               <el-menu-item index="6-1" @click="naviTo('medicine')">Medicine Management</el-menu-item>
               <el-menu-item index="6-2" @click="naviTo('returnM')">Return Medicine</el-menu-item>
               <el-menu-item index="6-3" @click="naviTo('send')">Send Medicine</el-menu-item>
             </el-submenu>
-            <el-submenu index="7">
+            <el-submenu index="7" v-if="disabled.financial">
               <template slot="title">Financial</template>
               <el-menu-item index="7-1" @click="naviTo('dailyrecord')">Daily Record</el-menu-item>
               <el-menu-item index="7-2" @click="naviTo('depts')">Departments</el-menu-item>
@@ -92,9 +92,61 @@
           username: '',
         },
         loginButton: 'danger',
-        loginState: 'LogOut'
+        loginState: 'LogOut',
+        disabled:{
+          management:false,
+          register:false,
+          outpatient:false,
+          medtech:false,
+          pharmacy:false,
+          financial:false,
+          homepage:true
+        }
       };
     },
+    computed: {
+      newUser() {
+        return this.user.usercat;
+      }
+    },
+    watch: {
+      newUser(val) {
+
+        this.disabled.management = false;
+        this.disabled.register = false;
+        this.disabled.outpatient = false;
+        this.disabled.medtech = false;
+        this.disabled.pharmacy = false;
+        this.disabled.financial = false;
+        this.disabled.homepage = true;
+
+        if (val === "医院管理员") {
+          this.disabled.management = true;
+          this.disabled.register = true;
+          this.disabled.outpatient = true;
+          this.disabled.medtech = true;
+          this.disabled.pharmacy = true;
+          this.disabled.financial = true;
+          this.disabled.homepage = false;
+        } else if (val === "挂号收费员") {
+          this.disabled.register = true;
+          this.disabled.homepage = false;
+        } else if (val === "门诊医生") {
+          this.disabled.outpatient = true;
+          this.disabled.homepage = false;
+        } else if (val === "医技医生") {
+          this.disabled.medtech = true;
+          this.disabled.homepage = false;
+        } else if (val === "药房管理员") {
+          this.disabled.pharmacy = true;
+          this.disabled.homepage = false;
+        } else if (val === "财务管理员") {
+          this.disabled.financial = true;
+          this.disabled.homepage = false;
+        }
+      }
+    },
+
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);

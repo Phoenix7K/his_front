@@ -40,8 +40,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'login_banner',
+      component: login_banner
     },
     {
       path: '/login_banner',

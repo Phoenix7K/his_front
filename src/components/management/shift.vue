@@ -259,7 +259,7 @@
       },
 
       delAllShift: function () {
-        var ids = this.multipleSelection.map(item => item.shiftid).join();//获取所有选中行的id组成的字符串，以逗号分隔
+        var ids = this.multipleSelection.map(item => item.shiftid).join();    //获取所有选中行的id组成的字符串，以逗号分隔
         console.log(ids);
         var that = this;
         this.$confirm('Are you sure you want to delete all this?', 'Note', {

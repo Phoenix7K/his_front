@@ -303,7 +303,7 @@
           }).then(function () {
             that.loadDisposal();
             if (state === 'Opene') {
-              this.$axios.post('/api/outpatient/addExamToBill', {
+              that.$axios.post('/api/outpatient/addExamToBill', {
                 items: that.multipleSelection,
                 pid: that.pid,
                 regid: that.regid,

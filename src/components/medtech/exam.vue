@@ -145,9 +145,9 @@
                            name="picture"
                            action="/api/medtech/upload"
                            :on-preview="handlePictureCardPreview"
-                           :before-upload="beforeUpload"
                            :on-remove="handleRemove"
                            :on-change="onChange"
+                           :on-success="handleSuccess"
                            :file-list="fileList"
                            :before-remove="beforeRemove"
                            :auto-upload="false"
@@ -185,8 +185,8 @@
 
     <el-dialog title="Image Preview"
                :visible.sync="ViewDialogVisible">
-      <div class="demo-image__lazy">
-        <el-image :fit="fits" v-for="url in ViewImgUrls" :key="url" :src="url" lazy></el-image>
+      <div>
+        <el-image :fit="fits" v-for="url in ViewImgUrls" :key="url" :src="url"></el-image>
       </div>
 
     </el-dialog>
@@ -306,7 +306,7 @@
           this.examForm = this.currentRow;
           this.ViewImgUrls = [];
           for (var i = 0; i < this.currentRow.imgUrls.length; i++) {
-            this.ViewImgUrls.push('../../upload/' + this.currentRow.imgUrls[i]);
+            this.ViewImgUrls.push(this.currentRow.imgUrls[i]);
           }
 
 
@@ -409,11 +409,10 @@
           var that = this;
           this.$axios.post('/api/medtech/addResults', {
             'exid': this.currentRow.exid,
-            'imgUrls': this.imgUrls,
             'result': this.examForm.result,
           })
             .then(function () {
-              that.loadPatientList('form');
+
               that.formDisable = true;
               that.submitButtonType = 'success';
 
@@ -429,8 +428,24 @@
           console.log(file, fileList);
         },
 
-        beforeUpload(file) {
-          this.imgUrls.push(file.name)
+        handleSuccess(response, file, fileList) {
+          var that = this;
+          this.imgUrls.push(response);
+          console.log(response);
+
+          this.$axios.post('/api/medtech/addImg', {
+            'exid': this.currentRow.exid,
+            'imgUrls': response,
+          })
+            .then(function () {
+              that.loadPatientList('form');
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+
+          console.log(this.imgUrls);
+
         },
 
         onChange(file, fileList) {

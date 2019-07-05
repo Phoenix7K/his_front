@@ -90,10 +90,10 @@
             console.log("add!!!!!!");
 
             this.$axios.post('/api/outpatient/addItemToExam', {
-              regid: test.regid,
+              regid: that.$parent.regid,
               extype: 'test',
-              uRid: test.uRid,
-              addList: this.multipleSelection
+              uRid: that.$parent.uRid,
+              addList: this.multipleSelection,
             }).then(function () {
               that.$parent.loadTest();
             })

@@ -92,9 +92,9 @@
             console.log("add!!!!!!");
 
             this.$axios.post('/api/outpatient/addItemToExam', {
-              regid: disposal.regid,
+              regid: that.$parent.regid,
               extype: 'disposal',
-              uRid: disposal.uRid,
+              uRid: that.$parent.uRid,
               addList: this.multipleSelection
             }).then(function () {
               that.$parent.loadDisposal();

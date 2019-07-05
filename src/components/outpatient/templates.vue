@@ -212,11 +212,10 @@
           var tarr = t.split('.000');
           var marr = tarr[0].split(':');
 
-          var dd = parseInt(darr[0]) + "-" + parseInt(darr[1]) + "-" + parseInt(darr[2]) + " " + (parseInt(marr[0]) + 8) + ":" + parseInt(marr[1]) + ":" + parseInt(marr[2]);
-
+          var dd = parseInt(darr[0]) + "-" + parseInt(darr[1]) + "-" + parseInt(darr[2]) + " "
+            + (parseInt(marr[0]) + 8) + ":" + parseInt(marr[1]) + ":" + parseInt(marr[2]);
           return dd;
         }
-
         return time2;
       },
       /**
