@@ -1,7 +1,7 @@
 
 <template>
   <div id="department">
-    <el-row :gutter="30">
+    <el-row :gutter="30" style="margin-left: 95px;">
         <el-col :span="10" :gutter="10">
           <div style="margin-left: -90px">
             <el-date-picker v-model="datevalue" value-format="yyyy-MM-dd" type="daterange" align="right" unlink-panels range-separator="To" start-placeholder="Start Date" end-placeholder="End Date" ></el-date-picker>

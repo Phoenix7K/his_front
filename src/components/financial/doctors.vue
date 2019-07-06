@@ -1,6 +1,6 @@
 <template>
   <div id="doctors">
-    <el-row :gutter="30" type="flex" justify="space-between">
+    <el-row :gutter="30" type="flex" justify="space-between" style="margin-left: 95px;">
       <el-col :span="10">
         <div style="margin-left: -90px">
           <el-date-picker v-model="datevalue"

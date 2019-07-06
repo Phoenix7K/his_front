@@ -237,7 +237,8 @@
 
   #text {
     font-family: Helvetica, sans-serif;
-    line-height: 190%
+    line-height: 190%;
+    margin-top: 95px;
   }
 
   #stp {
